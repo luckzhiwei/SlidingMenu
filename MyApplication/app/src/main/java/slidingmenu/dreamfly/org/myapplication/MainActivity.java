@@ -3,20 +3,48 @@ package slidingmenu.dreamfly.org.myapplication;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import slidingmenu.dreamfly.org.myapplication.custom.DefineSlidingMenu;
 
 
 public class MainActivity extends Activity {
 
 
+    private DefineSlidingMenu mDefineSlingMenu;
+    private Button btn;
+    private boolean isOpen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.scale_menu_layout);
-
+        setContentView(R.layout.define_sliding_layout);
+        this.isOpen=false;
+        this.mDefineSlingMenu=(DefineSlidingMenu)this.findViewById(R.id.defslidmenu_detslignmenu_rootlayout);
+        this.mDefineSlingMenu.setmMenuLayout(LayoutInflater.from(this).inflate(R.layout.menu_layout,null));
+        View contentView=LayoutInflater.from(this).inflate(R.layout.content_layout, null);
+        this.mDefineSlingMenu.setmContentLayout(contentView);
+        this.mDefineSlingMenu.setIsalpha(true);
+        this.mDefineSlingMenu.setIsScale(true);
+        btn=(Button)contentView.findViewById(R.id.btn_mainactivity_showmenu);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  if(isOpen){
+                       mDefineSlingMenu.showMenu();
+                  }else{
+                      mDefineSlingMenu.closeMenu();
+                  }
+                  isOpen=!isOpen;
+            }
+        });
     }
 
     @Override

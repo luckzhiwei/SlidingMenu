@@ -42,6 +42,7 @@ public class ScaleSlidingMenu extends HorizontalScrollView {
         this.mScreenWidth=outMetrics.widthPixels;
     }
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
         if(!once) {
@@ -109,15 +110,18 @@ public class ScaleSlidingMenu extends HorizontalScrollView {
     }
 
     public void showMenu(){
-        if(this.isOpen){
-            return;
+        if(!this.isOpen) {
+            this.smoothScrollTo(0, 0);
+            this.alphaMenu(1.0f);
+            this.scaleContentLayout(1.0f);
         }
-        this.smoothScrollTo(0,0);
     }
 
     public void closeMenu(){
         if(this.isOpen){
             this.smoothScrollTo(this.mMenuWidth,0);
+            this.alphaMenu(0.0f);
+            this.scaleContentLayout(0.0f);
         }
     }
 
@@ -134,7 +138,7 @@ public class ScaleSlidingMenu extends HorizontalScrollView {
         MarginLayoutParams marginLayoutParams = (MarginLayoutParams) this.mContentLayout.getLayoutParams();
         marginLayoutParams.bottomMargin = (int) (this.mHalfMenuHeight * radioX);
         marginLayoutParams.topMargin = (int) (this.mHalfMenuHeight * radioX);
-        this.mContentLayout.setLayoutParams(marginLayoutParams);
+       this.mContentLayout.setLayoutParams(marginLayoutParams);
     }
 
     private void alphaMenu(float alphaRaido){
