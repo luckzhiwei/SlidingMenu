@@ -33,6 +33,10 @@ public class MainActivity extends Activity {
         this.mDefineSlingMenu.setmContentLayout(contentView);
         this.mDefineSlingMenu.setIsalpha(true);
         this.mDefineSlingMenu.setIsScale(true);
+        this.mDefineSlingMenu.setMenuRaido(0.7f);
+        this.mDefineSlingMenu.setIsOpenInit(true);
+        this.mDefineSlingMenu.setContentScaleRaido(0.16f);
+        this.mDefineSlingMenu.setMenuAlphaRadio(0.5f);
         btn=(Button)contentView.findViewById(R.id.btn_mainactivity_showmenu);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +49,8 @@ public class MainActivity extends Activity {
                   isOpen=!isOpen;
             }
         });
+
+
     }
 
     @Override

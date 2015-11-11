@@ -138,7 +138,7 @@ public class ScaleSlidingMenu extends HorizontalScrollView {
         MarginLayoutParams marginLayoutParams = (MarginLayoutParams) this.mContentLayout.getLayoutParams();
         marginLayoutParams.bottomMargin = (int) (this.mHalfMenuHeight * radioX);
         marginLayoutParams.topMargin = (int) (this.mHalfMenuHeight * radioX);
-       this.mContentLayout.setLayoutParams(marginLayoutParams);
+        this.mContentLayout.setLayoutParams(marginLayoutParams);
     }
 
     private void alphaMenu(float alphaRaido){

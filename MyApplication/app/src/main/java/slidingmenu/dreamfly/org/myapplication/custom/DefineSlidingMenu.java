@@ -26,12 +26,19 @@ public class DefineSlidingMenu extends HorizontalScrollView {
     private int mHalfMenuHeight;
 
     private boolean isOpen;
+    //侧滑初始化打开的状态
     private boolean once;
 
     private boolean isalpha;
     //侧滑时候菜单是否渐变
     private boolean isScale;
     //侧滑是主页面是否缩小
+    private float menuRaido;
+    //菜单的占的屏幕比例
+    private float contentScaleRaido;
+    //设定主菜单在侧滑时候的缩放比例
+    private float menuAlphaRadio;
+    //设置菜单的透明度
 
     private View mMenuLayout;
     private View mContentLayout;
@@ -53,37 +60,78 @@ public class DefineSlidingMenu extends HorizontalScrollView {
          ViewGroup.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
          this.mWrapperLayout.setLayoutParams(layoutParams);
          this.addView(this.mWrapperLayout);
+         this.menuRaido=0.67f;
+         this.isOpen=true;
+         this.contentScaleRaido=0.16f;
+         this.menuAlphaRadio=1.0f;
     }
 
-
+    /**
+     * 加载初始化的菜单的XML布局，默认为0.67f
+     * @param mMenuLayout
+     */
     public void setmMenuLayout(View mMenuLayout){
           this.mMenuLayout=(LinearLayout)mMenuLayout;
           this.mWrapperLayout.addView(mMenuLayout);
-          ViewGroup.LayoutParams mMenuLayoutParams=mMenuLayout.getLayoutParams();
-          this.mMenuWidth=this.mScreenWidth-this.mScreenWidth/3;
-          mMenuLayoutParams.width=this.mMenuWidth;
-          mMenuLayoutParams.height= ViewGroup.LayoutParams.MATCH_PARENT;
-          this.mMenuLayout.setLayoutParams(mMenuLayoutParams);
-          mMaxMoveDis = this.mMenuWidth / 2;
-
+          this.setMenuWidth(0.67f);
     }
+
     public  View getMenuLayout(){
-         return(this.mMenuLayout);
+        return(this.mMenuLayout);
     }
 
+    public void setMenuAlphaRadio(float menuAlphaRadio){
+         this.menuAlphaRadio=menuAlphaRadio;
+    }
+
+    /**
+     * 设置菜单的宽度
+     * @param menuRaido
+     */
+    private void setMenuWidth(float menuRaido){
+        ViewGroup.LayoutParams mMenuLayoutParams=mMenuLayout.getLayoutParams();
+        this.mMenuWidth=(int)(this.mScreenWidth*menuRaido);
+        mMenuLayoutParams.width=this.mMenuWidth;
+        mMenuLayoutParams.height= ViewGroup.LayoutParams.MATCH_PARENT;
+        this.mMenuLayout.setLayoutParams(mMenuLayoutParams);
+        mMaxMoveDis = this.mMenuWidth / 2;
+    }
+
+    /**
+     * 设置菜单的缩放比例
+     * @param menuRaido
+     */
+    public void setMenuRaido(float menuRaido){
+         this.menuRaido=menuRaido;
+         this.setMenuWidth(this.menuRaido);
+    }
+
+    /**
+     * 设置主体界面的内容
+     * @param mContentLayout
+     */
     public void setmContentLayout(View mContentLayout){
         this.mContentLayout=mContentLayout;
         this.mWrapperLayout.addView(mContentLayout);
+        this.setContentScale(this.contentScaleRaido);
+    }
+
+    private void setContentScale(float contentScaleRadio){
         ViewGroup.LayoutParams mContentParams=mContentLayout.getLayoutParams();
         this.mContentWidth=this.mScreenWidth;
         mContentParams.width=this.mContentWidth;
         mContentParams.height= ViewGroup.LayoutParams.MATCH_PARENT;
-       this.mContentLayout.setLayoutParams(mContentParams);
-        mHalfMenuHeight=this.mScreenWidth/6;
+        this.mContentLayout.setLayoutParams(mContentParams);
+        mHalfMenuHeight=(int)(this.mScreenWidth*contentScaleRadio);
     }
 
-    public View getmContentLayouy(){
+    public View getmContentLayout(){
         return(this.mContentLayout);
+    }
+
+    public void setContentScaleRaido(float contentScaleRaido){
+         this.contentScaleRaido=contentScaleRaido;
+         this.setContentScale(contentScaleRaido);
     }
 
     @Override
@@ -94,23 +142,33 @@ public class DefineSlidingMenu extends HorizontalScrollView {
             }
         }
         super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b){
         super.onLayout(changed,l,t,r,b);
         if(changed){
-            this.smoothScrollTo(this.mMenuWidth,0);
-            isOpen=false;
+            if(this.isOpen) {
+                this.showMenu();
+            }else{
+                this.closeMenu();
+            }
             once=true;
         }
     }
 
+    /**
+     * 设置是否进行透明度
+     * @param isalpha
+     */
     public void setIsalpha(boolean isalpha){
           this.isalpha=isalpha;
     }
 
+    /**
+     * 设置是否进行缩放
+     * @param isScale
+     */
     public void setIsScale(boolean isScale){
          this.isScale=isScale;
     }
@@ -133,15 +191,9 @@ public class DefineSlidingMenu extends HorizontalScrollView {
                  */
                 if(this.mContentLayout!=null && this.mMenuLayout!=null) {
                     if (this.getScrollX() < this.mMaxMoveDis) {
-                        this.smoothScrollTo(0, 0);
-                        this.scaleContentLayout(1.0f);
-                        this.alphaMenu(1.0f);
-                        isOpen = true;
+                       this.showMenu();
                     } else {
-                        this.smoothScrollTo(mMenuWidth, 0);
-                        this.scaleContentLayout(0.0f);
-                        this.alphaMenu(0.0f);
-                        isOpen = false;
+                       this.closeMenu();
                     }
                 }
                 return(true);
@@ -149,23 +201,22 @@ public class DefineSlidingMenu extends HorizontalScrollView {
         return (super.onTouchEvent(ev));
     }
 
-
+    /**
+     * 显示菜单
+     */
     public void showMenu(){
-        if(!this.isOpen) {
             this.smoothScrollTo(0, 0);
-            this.alphaMenu(1.0f);
+            this.alphaMenu(this.menuAlphaRadio);
             this.scaleContentLayout(1.0f);
-            this.isOpen=true;
-        }
     }
 
+    /**
+     * 关闭菜单
+     */
     public void closeMenu(){
-        if(this.isOpen){
             this.smoothScrollTo(this.mMenuWidth,0);
             this.alphaMenu(0.0f);
             this.scaleContentLayout(0.0f);
-            this.isOpen=false;
-        }
     }
 
     /**
@@ -187,10 +238,22 @@ public class DefineSlidingMenu extends HorizontalScrollView {
      */
     private void alphaMenu(float alphaRaido) {
         if (this.isalpha) {
-            this.mMenuLayout.startAnimation(AnimationUtils.getAplhaAnimation(alphaRaido, alphaRaido));
+            if (alphaRaido <= this.menuAlphaRadio) {
+                this.mMenuLayout.startAnimation(AnimationUtils.getAplhaAnimation(alphaRaido, alphaRaido));
+            }else{
+                this.mMenuLayout.startAnimation(AnimationUtils.getAplhaAnimation(this.menuAlphaRadio,this.menuAlphaRadio));
+            }
+//            this.mMenuLayout.startAnimation(AnimationUtils.getAplhaAnimation(alphaRaido, alphaRaido));
         }
     }
 
+    /**
+     * 设置初始化的时候，是否进行是打开菜单的
+     * @param isOpen
+     */
+    public void  setIsOpenInit(boolean isOpen){
+           this.isOpen=isOpen;
+    }
 
 
 
