@@ -11,15 +11,17 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import slidingmenu.dreamfly.org.myapplication.custom.DefineScaleSlidingMenu;
 import slidingmenu.dreamfly.org.myapplication.custom.DefineSlidingMenu;
 
 
 public class MainActivity extends Activity {
 
 
-    private DefineSlidingMenu mDefineSlingMenu;
+    private DefineScaleSlidingMenu mDefineSlingMenu;
     private Button btn;
     private boolean isOpen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +29,17 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.define_sliding_layout);
         this.isOpen=false;
-        this.mDefineSlingMenu=(DefineSlidingMenu)this.findViewById(R.id.defslidmenu_detslignmenu_rootlayout);
+        this.mDefineSlingMenu=(DefineScaleSlidingMenu)this.findViewById(R.id.defslidmenu_detslignmenu_rootlayout);
         this.mDefineSlingMenu.setmMenuLayout(LayoutInflater.from(this).inflate(R.layout.menu_layout,null));
         View contentView=LayoutInflater.from(this).inflate(R.layout.content_layout, null);
         this.mDefineSlingMenu.setmContentLayout(contentView);
-        this.mDefineSlingMenu.setIsalpha(true);
-        this.mDefineSlingMenu.setIsScale(true);
         this.mDefineSlingMenu.setMenuRaido(0.7f);
         this.mDefineSlingMenu.setIsOpenInit(true);
-        this.mDefineSlingMenu.setContentScaleRaido(0.16f);
-        this.mDefineSlingMenu.setMenuAlphaRadio(0.5f);
+        this.mDefineSlingMenu.setIsScale(true);
+        this.mDefineSlingMenu.setIsalpha(true);
+        this.mDefineSlingMenu.setIsOpenInit(false);
+//        this.mDefineSlingMenu.setContentScaleRaido(0.16f);
+
         btn=(Button)contentView.findViewById(R.id.btn_mainactivity_showmenu);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +52,6 @@ public class MainActivity extends Activity {
                   isOpen=!isOpen;
             }
         });
-
 
     }
 
