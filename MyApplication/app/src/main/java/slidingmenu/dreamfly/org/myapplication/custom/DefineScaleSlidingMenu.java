@@ -23,7 +23,6 @@ public class DefineScaleSlidingMenu extends DefineSlidingMenu {
            super(context, attrs);
            this.setContentScaleRaido(0.16f);
            this.menuAlphaRadio=1.0f;
-
        }
 
        @Override
@@ -113,9 +112,6 @@ public class DefineScaleSlidingMenu extends DefineSlidingMenu {
     public void setIsScale(boolean isScale){
         this.isScale=isScale;
     }
-
-
-
 
 
 }
